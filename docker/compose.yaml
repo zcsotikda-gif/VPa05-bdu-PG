@@ -1,0 +1,16 @@
+# Имя проекта задано явно: без него Compose назвал бы образ и контейнер по
+# каталогу с этим файлом (docker-tests), а не по приложению.
+name: passgen
+
+services:
+  tests:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    working_dir: /app
+    environment:
+      PASSGEN_DATA: /tmp/passgen
+    volumes:
+      - ../src:/app/src:ro
+      - ../tests:/app/tests:ro
+    command: ["pytest"]

@@ -1,0 +1,31 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "passgen"
+version = "0.1.0"
+description = "CLI-менеджер паролей: SQLite, Fernet, мастер-пароль"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["cryptography>=43"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[project.scripts]
+passgen = "passgen.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/passgen"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
