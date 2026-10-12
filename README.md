@@ -53,7 +53,26 @@
 ```sh
 .venv/bin/pytest
 .venv/bin/ruff check . && .venv/bin/ruff format --check .
-docker compose -f docker/compose.yaml up --build --abort-on-container-exit
 ```
 
-Контейнер прогоняет тесты в Linux на чистой установке пакета.
+### Тесты в Docker
+
+Контейнер прогоняет тесты в Linux на чистой установке пакета. Самой программы в нём нет:
+она интерактивная и запускается в вашем терминале.
+
+Запуск — Docker Desktop должен быть открыт. Образ собирается при первом запуске:
+
+```sh
+docker compose -f docker/compose.yaml up --build --abort-on-container-exit --exit-code-from tests
+```
+
+- `--build` — собрать образ `passgen-tests` (или пересобрать, если код изменился);
+- `--abort-on-container-exit` — остановить контейнер, когда тесты закончились;
+- `--exit-code-from tests` — код возврата команды равен коду pytest: 0 значит «все тесты прошли».
+
+После прогона в Docker Desktop остаются остановленный контейнер `passgen-tests-1` и образ
+`passgen-tests`. Ресурсов они не тратят, только место на диске. Удалить их:
+
+```sh
+docker compose -f docker/compose.yaml down --rmi local
+```
